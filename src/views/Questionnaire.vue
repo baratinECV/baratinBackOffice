@@ -1,36 +1,30 @@
 <template>
   <div class="questionnaire">
-    <h1>Questionnaire</h1>
     <p>Activer questionnaire</p>
     <label class="switch">
       <input
-        type="checkbox"
-        :checked="questionnaire_model.is_active"
-        @click="toggleActiveQuestionnaire"
+          type="checkbox"
+          :checked="questionnaire_model.is_active"
+          @click="toggleActiveQuestionnaire"
       />
       <span class="slider round"></span>
     </label>
-    <button v-if="!edit">Editer</button>
-    <p>Nom : {{questionnaire_model.name}}</p>
-    <p>Description : {{questionnaire_model.description}}</p>
-    <ul v-for="question in questionnaire_model.questions" :key="question.id">
-      <li>
-        <p>Question {{question.order}}</p>
-        <p>{{question.name}}</p>
-        <p>Réponses</p>
-        <ul v-for="response in question.responses" :key="response.id">
-          <li>{{response.name}}</li>
-        </ul>
-      </li>
-    </ul>
+    <QuestionnaireEdit v-if="!edit" :questionnaireModelProps="questionnaire_model"/>
+    <QuestionnaireView v-else :questionnaireModelProps="questionnaire_model"/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
+import QuestionnaireView from "@/components/QuestionnaireView"
+import QuestionnaireEdit from "@/components/QuestionnaireEdit"
 
 export default {
   name: "Questionnaire",
+  components: {
+    QuestionnaireView,
+    QuestionnaireEdit
+  },
   props: {
     id: [Number, String],
   },
