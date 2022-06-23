@@ -6,8 +6,19 @@
       <input type="checkbox" :checked="questionnaire_model.is_active" @click="toggleActiveQuestionnaire">
       <span class="slider round"></span>
     </label>
+    <button v-if="!edit">Editer</button>
     <p>Nom : {{questionnaire_model.name}}</p>
     <p>Description : {{questionnaire_model.description}}</p>
+    <ul v-for="question in questionnaire_model.questions" :key="question.id">
+      <li>
+        <p>Question {{question.order}}</p>
+        <p>{{question.name}}</p>
+        <p>Réponses</p>
+        <ul v-for="response in question.responses" :key="response.id">
+          <li>{{response.name}}</li>
+        </ul>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -22,13 +33,18 @@ export default {
   },
   data () {
     return {
-      questionnaire_model: {}
+      questionnaire_model: {},
+      edit: false
     }
   },
   methods: {
     async fetch () {
       return await axios
-          .get('questionnaire_models/' + this.id)
+          .get('questionnaire_models/' + this.id,{
+            params: {
+              limitResponse: 5
+            }
+          })
           .then((response) => {this.questionnaire_model = response.data})
     },
     async toggleActiveQuestionnaire () {
