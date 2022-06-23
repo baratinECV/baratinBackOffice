@@ -1,6 +1,6 @@
 <template>
   <h1>Questionnaire</h1>
-  <button>Editer</button>
+  <button @click="$emit('changeMode')">Editer</button>
   <p>Nom</p>
   <input disabled v-model="questionnaireModel.name">
   <p>Description</p>

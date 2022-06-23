@@ -1,10 +1,9 @@
 <template>
   <h1>Questionnaire</h1>
-  <button>Editer</button>
   <p>Nom</p>
-  <input disabled v-model="questionnaireModel.name">
+  <input v-model="questionnaireModel.name">
   <p>Description</p>
-    <textarea disabled v-model="questionnaireModel.name"
+    <textarea v-model="questionnaireModel.name"
             rows="5" cols="33">
   It was a dark and stormy night...
   </textarea>
@@ -18,6 +17,7 @@
       </ul>
     </li>
   </ul>
+  <button @click="$emit('changeMode')">Sauvegarder</button>
 </template>
 
 <script>

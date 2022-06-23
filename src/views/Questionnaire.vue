@@ -9,8 +9,8 @@
       />
       <span class="slider round"></span>
     </label>
-    <QuestionnaireEdit v-if="edit" :questionnaireModelProps="questionnaire_model"/>
-    <QuestionnaireView v-else :questionnaireModelProps="questionnaire_model"/>
+    <QuestionnaireEdit v-if="edit" :questionnaireModelProps="questionnaire_model" @changeMode="toggleMode"/>
+    <QuestionnaireView v-else :questionnaireModelProps="questionnaire_model" @changeMode="toggleMode"/>
   </div>
 </template>
 
@@ -49,6 +49,9 @@ export default {
           this.questionnaire_model = response.data;
         });
     },
+    toggleMode() {
+      this.edit = !this.edit
+    }
   },
   mounted() {
     this.fetch();
