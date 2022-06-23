@@ -1,40 +1,44 @@
 <template>
   <div class="questionnaire">
-    <h1>Questionnaire</h1>
     <p>Activer questionnaire</p>
     <label class="switch">
       <input
-        type="checkbox"
-        :checked="questionnaire_model.is_active"
-        @click="toggleActiveQuestionnaire"
+          type="checkbox"
+          :checked="questionnaire_model.is_active"
+          @click="toggleActiveQuestionnaire"
       />
       <span class="slider round"></span>
     </label>
-    <p>Nom : {{ questionnaire_model.name }}</p>
-    <p>Description : {{ questionnaire_model.description }}</p>
+    <QuestionnaireEdit v-if="edit" :questionnaireModelProps="questionnaire_model" @changeMode="toggleMode"/>
+    <QuestionnaireView v-else :questionnaireModelProps="questionnaire_model" @changeMode="toggleMode"/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
+import QuestionnaireView from "@/components/QuestionnaireView"
+import QuestionnaireEdit from "@/components/QuestionnaireEdit"
 
 export default {
   name: "Questionnaire",
+  components: {
+    QuestionnaireView,
+    QuestionnaireEdit
+  },
   props: {
     id: [Number, String],
   },
   data() {
     return {
       questionnaire_model: {},
-    };
+      edit: false
+    }
   },
   methods: {
     async fetch() {
       return await axios
-        .get("questionnaire_models/" + this.id)
-        .then((response) => {
-          this.questionnaire_model = response.data;
-        });
+          .get('questionnaire_models/' + this.id)
+          .then((response) => {this.questionnaire_model = response.data})
     },
     async toggleActiveQuestionnaire() {
       return await axios
@@ -45,6 +49,9 @@ export default {
           this.questionnaire_model = response.data;
         });
     },
+    toggleMode() {
+      this.edit = !this.edit
+    }
   },
   mounted() {
     this.fetch();
