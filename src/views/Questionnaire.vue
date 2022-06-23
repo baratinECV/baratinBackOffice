@@ -3,7 +3,11 @@
     <h1>Questionnaire</h1>
     <p>Activer questionnaire</p>
     <label class="switch">
-      <input type="checkbox" :checked="questionnaire_model.is_active" @click="toggleActiveQuestionnaire">
+      <input
+        type="checkbox"
+        :checked="questionnaire_model.is_active"
+        @click="toggleActiveQuestionnaire"
+      />
       <span class="slider round"></span>
     </label>
     <button v-if="!edit">Editer</button>
@@ -23,47 +27,42 @@
 </template>
 
 <script>
-
 import axios from "axios";
 
 export default {
-  name: 'Questionnaire',
+  name: "Questionnaire",
   props: {
-    id: [Number, String]
+    id: [Number, String],
   },
-  data () {
+  data() {
     return {
       questionnaire_model: {},
       edit: false
     }
   },
   methods: {
-    async fetch () {
+    async fetch() {
       return await axios
-          .get('questionnaire_models/' + this.id,{
-            params: {
-              limitResponse: 5
-            }
-          })
+          .get('questionnaire_models/' + this.id)
           .then((response) => {this.questionnaire_model = response.data})
     },
-    async toggleActiveQuestionnaire () {
+    async toggleActiveQuestionnaire() {
       return await axios
-          .patch('questionnaire_models/' + this.id, {
-            'is_active': !this.questionnaire_model.is_active
-          })
-          .then((response) => {
-            this.questionnaire_model = response.data
-          })
-    }
+        .patch("questionnaire_models/" + this.id, {
+          is_active: !this.questionnaire_model.is_active,
+        })
+        .then((response) => {
+          this.questionnaire_model = response.data;
+        });
+    },
   },
   mounted() {
-    this.fetch()
-  }
-}
+    this.fetch();
+  },
+};
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .switch {
   position: relative;
   display: inline-block;
@@ -74,11 +73,11 @@ export default {
     width: 0;
     height: 0;
     &:checked + .slider {
-      background-color: #2196F3;
+      background-color: #2196f3;
     }
 
     &:focus + .slider {
-      box-shadow: 0 0 1px #2196F3;
+      box-shadow: 0 0 1px #2196f3;
     }
 
     &:checked + .slider:before {
@@ -95,8 +94,8 @@ export default {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
 
     &:before {
       position: absolute;
@@ -106,8 +105,8 @@ export default {
       left: 4px;
       bottom: 4px;
       background-color: white;
-      -webkit-transition: .4s;
-      transition: .4s;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
     }
 
     &.round {
