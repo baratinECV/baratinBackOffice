@@ -48,7 +48,7 @@ export default {
     async destroy (questionnaire_model_id) {
       return await axios
           .delete('questionnaire_models/' + questionnaire_model_id)
-          .then(() => {this.questionnaire_models = this.questionnaire_models.map(questionnaire_model => questionnaire_model.id !== questionnaire_model_id)})
+          .then(() => {this.questionnaire_models = this.questionnaire_models.filter(questionnaire_model => questionnaire_model.id !== questionnaire_model_id)})
     }
   },
   mounted() {
@@ -112,7 +112,7 @@ export default {
       <li v-for="questionnaire_model in questionnaire_models" :key="questionnaire_model.id">
         <p>{{ questionnaire_model.name }} ({{questionnaire_model.is_active ? 'Activé' : 'Désactivé'}})</p>
         <router-link :to="'/questionnaire/' + questionnaire_model.id">Editer</router-link>
-        <button @click="destroy(questionnaire_models.id)">Supprimer</button>
+        <button @click="destroy(questionnaire_model.id)">Supprimer</button>
       </li>
     </ul>
     </div>
