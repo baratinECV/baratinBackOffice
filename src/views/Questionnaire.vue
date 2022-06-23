@@ -9,7 +9,7 @@
       />
       <span class="slider round"></span>
     </label>
-    <QuestionnaireEdit v-if="!edit" :questionnaireModelProps="questionnaire_model"/>
+    <QuestionnaireEdit v-if="edit" :questionnaireModelProps="questionnaire_model"/>
     <QuestionnaireView v-else :questionnaireModelProps="questionnaire_model"/>
   </div>
 </template>
