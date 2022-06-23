@@ -27,9 +27,10 @@ const routes = [
   }
   ,
   {
-    path: '/questionnaire',
+    path: '/questionnaire/:id',
     name: 'Questionnaire',
-    component: Questionnaire
+    component: Questionnaire,
+    props: true
   }
 ]
 
