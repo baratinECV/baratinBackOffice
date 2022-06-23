@@ -35,6 +35,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 9999;
 
     img {
       width: 100vw;
