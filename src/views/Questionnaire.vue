@@ -3,7 +3,7 @@
     <h1>Questionnaire</h1>
     <p>Activer questionnaire</p>
     <label class="switch">
-      <input type="checkbox" :checked="questionnaire_model.is_active">
+      <input type="checkbox" :checked="questionnaire_model.is_active" @click="toggleActiveQuestionnaire">
       <span class="slider round"></span>
     </label>
     <p>Nom : {{questionnaire_model.name}}</p>
@@ -31,6 +31,15 @@ export default {
           .get('questionnaire_models/' + this.id)
           .then((response) => {this.questionnaire_model = response.data})
     },
+    async toggleActiveQuestionnaire () {
+      return await axios
+          .patch('questionnaire_models/' + this.id, {
+            'is_active': !this.questionnaire_model.is_active
+          })
+          .then((response) => {
+            this.questionnaire_model = response.data
+          })
+    }
   },
   mounted() {
     this.fetch()
