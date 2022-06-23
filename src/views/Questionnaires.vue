@@ -390,8 +390,14 @@ p {
         &:nth-child(5) {
           margin-right: 63px;
         }
+        &:nth-child(8) {
+          margin-right: 0;
+        }
         &:nth-child(9) {
           margin-right: 63px;
+        }
+        &:nth-child(12) {
+          margin-right: 0;
         }
         &:nth-child(13) {
           margin-right: 63px;
