@@ -3,7 +3,7 @@
     <h1>Pack immersion</h1>
     <p>Activer pack immersion</p>
     <label class="switch">
-      <input type="checkbox" :checked="shop.is_active">
+      <input type="checkbox" :checked="shop.is_active" @click="toggleActiveShop">
       <span class="slider round"></span>
     </label>
     <ul>
@@ -42,6 +42,15 @@ export default {
             this.questionnaire_models = response.data
           })
     },
+    async toggleActiveShop () {
+      return await axios
+          .patch('shops/' + this.shop.id, {
+            'is_active': !this.shop.is_active
+          })
+          .then((response) => {
+            this.$store.setShop(response.data)
+          })
+    }
   },
   mounted() {
     this.fetch()
