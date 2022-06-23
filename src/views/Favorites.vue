@@ -1,8 +1,8 @@
 <template>
   <div class="favorites">
     <h1>Coups de coeur</h1>
-    <ul>
-      <li v-for="product in products" :key="product.id">{{ product.name }}</li>
+    <ul class="products">
+      <li v-for="product in products" :key="product.id" :class="'product' + (product.is_favorite ? ' favorite' : '')" @click="update(product)">{{ product.name }}</li>
     </ul>
   </div>
 </template>
@@ -32,8 +32,12 @@ export default {
             }
           })
           .then((response) => {
-            this.products.push(...response.data)
+            this.products = response.data
           })
+    },
+    async update (product) {
+      product.is_favorite = !product.is_favorite
+      return await axios.patch('products/' + product.id, product)
     }
   },
   mounted() {
@@ -42,4 +46,13 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.products {
+  .product {
+    cursor: pointer;
+    &.favorite {
+      color: red;
+    }
+  }
+}
+</style>
