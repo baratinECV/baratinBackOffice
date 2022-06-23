@@ -18,10 +18,19 @@ export default {
       products: []
     }
   },
+  computed : {
+    shop () {
+      return this.$store.getters.getShop
+    }
+  },
   methods: {
     async fetch () {
       return await axios
-          .get('products')
+          .get('products', {
+            params: {
+              shop_id: this.shop.id
+            }
+          })
           .then((response) => {
             this.products.push(...response.data)
           })

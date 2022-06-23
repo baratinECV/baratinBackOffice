@@ -27,11 +27,16 @@ export default {
       tags: []
     }
   },
+  computed : {
+    shop () {
+      return this.$store.getters.getShop
+    }
+  },
   methods: {
     async getProduct (params = {}) {
       if (params.next) return await axios.get('products/' + this.product.id, { params: params }).then((response) => { this.product = response.data })
       else if (params.previous) return await axios.get('products/' + this.product.id, { params: params}).then((response) => { this.product = response.data })
-      else return await axios.get('products', { params: { random: true } }).then((response) => { this.product = response.data[0] })
+      else return await axios.get('products', { params: { shop_id: this.shop.id, random: true } }).then((response) => { this.product = response.data[0] })
     },
     async getTags () {
       return await axios
