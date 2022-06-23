@@ -89,9 +89,6 @@ export default {
         <p class="pricing">{{ product.price }} €</p>
       </div>
     </div>
-    <!-- <p>{{ product.name }} id: ({{ product.id }})</p>
-    <p>mini description : à rajouter en bdd...</p>
-    <p>prix : {{ product.price }} &euro;</p> -->
     <section class="form">
       <h3>Quels sont les attributs de votre produits ?</h3>
       <p class="sous-title">
