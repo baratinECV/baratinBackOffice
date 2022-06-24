@@ -6,46 +6,50 @@ export default {
     questionnaireModelProps: [Array, Object],
   },
   computed: {
-    questionnaireModel () { return this.questionnaireModelProps }
+    questionnaireModel() {
+      return this.questionnaireModelProps;
+    },
   },
-  data () {
+  data() {
     return {
-      tags: []
-    }
+      tags: [],
+    };
   },
   methods: {
     async attachTag(response, tag) {
       return await axios
-          .post("responses/" + response.id + "/tags/" + tag.id)
-          .then(() => {
-            this.questionnaireModel.questions = this.questionnaireModel.questions.map((question) => {
+        .post("responses/" + response.id + "/tags/" + tag.id)
+        .then(() => {
+          this.questionnaireModel.questions =
+            this.questionnaireModel.questions.map((question) => {
               question.responses = question.responses.map((response) => {
-                response.tags.push(tag)
-                return response
-              })
-              return question
-            })
-          });
+                response.tags.push(tag);
+                return response;
+              });
+              return question;
+            });
+        });
     },
     async detachTag(response, tag) {
       return await axios
-          .delete("responses/" + response.id + "/tags/" + tag.id)
-          .then(() => {
-            this.questionnaireModel.questions = this.questionnaireModel.questions.map((question) => {
+        .delete("responses/" + response.id + "/tags/" + tag.id)
+        .then(() => {
+          this.questionnaireModel.questions =
+            this.questionnaireModel.questions.map((question) => {
               question.responses = question.responses.map((response) => {
-                response.tags = response.tags.filter((tagResponse) => tagResponse.id !== tag.id)
-                return response
-              })
-              return question
-            })
-          });
+                response.tags = response.tags.filter(
+                  (tagResponse) => tagResponse.id !== tag.id
+                );
+                return response;
+              });
+              return question;
+            });
+        });
     },
     async fetchTags() {
-      return await axios
-          .get("tags")
-          .then((response) => {
-            this.tags = response.data
-          });
+      return await axios.get("tags").then((response) => {
+        this.tags = response.data;
+      });
     },
     responseHasTag(response, tag) {
       if (!response.tags) return false;
@@ -53,51 +57,58 @@ export default {
     },
     async createQuestion() {
       return await axios
-          .post("questions", {
-            questionnaire_model_id: this.questionnaireModel.id
-          })
-          .then((response) => {
-            this.questionnaireModel.questions = this.questionnaireModel.questions ? this.questionnaireModel.questions : []
-            this.questionnaireModel.questions.push(response.data)
-          });
+        .post("questions", {
+          questionnaire_model_id: this.questionnaireModel.id,
+        })
+        .then((response) => {
+          this.questionnaireModel.questions = this.questionnaireModel.questions
+            ? this.questionnaireModel.questions
+            : [];
+          this.questionnaireModel.questions.push(response.data);
+        });
     },
     async destroyQuestion(questionId) {
-      return await axios
-          .delete("questions/" + questionId)
-          .then(() => {
-            this.questionnaireModel.questions = this.questionnaireModel.questions.filter((question) => question.id !== questionId);
-          });
+      return await axios.delete("questions/" + questionId).then(() => {
+        this.questionnaireModel.questions =
+          this.questionnaireModel.questions.filter(
+            (question) => question.id !== questionId
+          );
+      });
     },
     async createResponse(questionId) {
       return await axios
-          .post("responses", {
-            question_id: questionId
-          })
-          .then((response) => {
-            this.questionnaireModel = this.questionnaireModel.questions.map((question) => {
-              question.responses = question.responses ? question.responses : []
-              question.responses.push(response.data)
-              return question
-            });
-          });
+        .post("responses", {
+          question_id: questionId,
+        })
+        .then((response) => {
+          this.questionnaireModel = this.questionnaireModel.questions.map(
+            (question) => {
+              question.responses = question.responses ? question.responses : [];
+              question.responses.push(response.data);
+              return question;
+            }
+          );
+        });
     },
     async destroyResponse(questionId, responseId) {
-      return await axios
-          .delete("responses/" + responseId)
-          .then(() => {
-            this.questionnaireModel = this.questionnaireModel.questions.map((question) => {
-              if (question.id === questionId) {
-                question.responses = question.responses.filter((response) => response.id !== responseId);
-              }
-              return question
-            });
-          });
+      return await axios.delete("responses/" + responseId).then(() => {
+        this.questionnaireModel = this.questionnaireModel.questions.map(
+          (question) => {
+            if (question.id === questionId) {
+              question.responses = question.responses.filter(
+                (response) => response.id !== responseId
+              );
+            }
+            return question;
+          }
+        );
+      });
     },
   },
-  mounted () {
-    this.fetchTags()
-  }
-}
+  mounted() {
+    this.fetchTags();
+  },
+};
 </script>
 
 <template>
@@ -120,17 +131,17 @@ export default {
       :key="question.id"
     >
       <li>
-        <p>Question {{ question.order }}</p>
+        <p class="full-title">Question {{ question.order }}</p>
 
-        <input v-model="question.name" />
-        <button @click="destroyQuestion(question.id)">Supprimer</button>
-        <p>Réponses</p>
+        <input class="title-input" v-model="question.name" />
+        <!-- <button @click="destroyQuestion(question.id)">Supprimer</button> -->
+        <p class="full-title">Réponses</p>
         <ul v-for="(response, key) in question.responses" :key="response.id">
           <li>
             <input v-model="response.name" />
-            <button @click="destroyResponse(question.id, response.id)">
+            <!-- <button @click="destroyResponse(question.id, response.id)">
               Supprimer
-            </button>
+            </button> -->
             <button
               v-if="
                 !question.responses || key + 1 === question.responses.length
@@ -373,31 +384,72 @@ input {
       }
     }
   }
-  .model-question {
+
+  .questions-container {
     border: 1px solid #b2b8d4;
     border-radius: 10px;
     padding: 30px 40px;
-    max-width: 1025px;
+    max-width: 1045px;
     text-align: left;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 23px;
+    margin-bottom: 28px;
 
-    h2 {
-      margin-bottom: 27px;
-    }
+    li {
+      list-style: none;
 
-    .renseignez-question {
-      max-width: 1005px;
-      width: 1005px;
-      margin-bottom: 20px;
-    }
+      .full-title {
+        font-weight: 700;
+        font-size: 20px;
+        color: $blue;
+        margin-bottom: 27px;
+      }
 
-    .ul-response {
-      margin-block-start: 0;
-      margin-block-end: 0;
-      padding-inline-start: 0;
-      li {
-        list-style: none;
+      .title-input {
+        width: 100%;
+        margin-bottom: 28px;
+      }
+
+      ul {
+        margin-block-start: 0;
+        margin-block-end: 0;
+        padding-inline-start: 0;
+
+        li {
+          input {
+            width: 100%;
+            margin-bottom: 28px;
+          }
+        }
       }
     }
   }
+  // .model-question {
+  //   border: 1px solid #b2b8d4;
+  //   border-radius: 10px;
+  //   padding: 30px 40px;
+  //   max-width: 1025px;
+  //   text-align: left;
+
+  //   h2 {
+  //     margin-bottom: 27px;
+  //   }
+
+  //   .renseignez-question {
+  //     max-width: 1005px;
+  //     width: 1005px;
+  //     margin-bottom: 20px;
+  //   }
+
+  //   .ul-response {
+  //     margin-block-start: 0;
+  //     margin-block-end: 0;
+  //     padding-inline-start: 0;
+  //     li {
+  //       list-style: none;
+  //     }
+  //   }
+  // }
 }
 </style>
