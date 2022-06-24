@@ -19,6 +19,10 @@
           <button @click="destroyResponse(question.id, response.id)">Supprimer</button>
           <button v-if="!question.responses || key + 1 === question.responses.length" @click="createResponse(question.id)">Ajouter</button>
         </li>
+        <p>Ajoutez vos tags</p>
+        <ul v-for="tag in tags" :key="tag.id">
+          <li @click="responseHasTag(response, tag.id) ? detachTag(response, tag) : attachTag(response, tag)" :class="responseHasTag(response, tag.id) ? 'tagSelected' : ''">{{tag.name}}</li>
+        </ul>
       </ul>
       <button v-if="!question.responses || (question.responses && !question.responses.length > 0)" @click="createResponse(question.id)">Ajouter</button>
     </li>
@@ -63,7 +67,49 @@ export default {
   computed: {
     questionnaireModel () { return this.questionnaireModelProps }
   },
+  data () {
+    return {
+      tags: []
+    }
+  },
   methods: {
+    async attachTag(response, tag) {
+      return await axios
+          .post("responses/" + response.id + "/tags/" + tag.id)
+          .then(() => {
+            this.questionnaireModel.questions = this.questionnaireModel.questions.map((question) => {
+              question.responses = question.responses.map((response) => {
+                response.tags.push(tag)
+                return response
+              })
+              return question
+            })
+          });
+    },
+    async detachTag(response, tag) {
+      return await axios
+          .delete("responses/" + response.id + "/tags/" + tag.id)
+          .then(() => {
+            this.questionnaireModel.questions = this.questionnaireModel.questions.map((question) => {
+              question.responses = question.responses.map((response) => {
+                response.tags = response.tags.filter((tagResponse) => tagResponse.id !== tag.id)
+                return response
+              })
+              return question
+            })
+          });
+    },
+    async fetchTags() {
+      return await axios
+          .get("tags")
+          .then((response) => {
+            this.tags = response.data
+          });
+    },
+    responseHasTag(response, tag) {
+      if (!response.tags) return false;
+      return response.tags.map((responseTag) => responseTag.id).includes(tag);
+    },
     async createQuestion() {
       return await axios
           .post("questions", {
@@ -106,6 +152,15 @@ export default {
             });
           });
     },
+  },
+  mounted () {
+    this.fetchTags()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.tagSelected {
+  color: red;
+}
+</style>
