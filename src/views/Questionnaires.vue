@@ -380,36 +380,16 @@ p {
 
       li {
         list-style: none;
-        width: 215px;
-        margin-left: 30px;
+        width: 277px;
         margin-right: 93px;
-
-        &:nth-child(4) {
-          margin-right: 0;
-        }
-        &:nth-child(5) {
-          margin-right: 63px;
-        }
-        &:nth-child(8) {
-          margin-right: 0;
-        }
-        &:nth-child(9) {
-          margin-right: 63px;
-        }
-        &:nth-child(12) {
-          margin-right: 0;
-        }
-        &:nth-child(13) {
-          margin-right: 63px;
-        }
 
         .add-question {
           display: flex;
           flex-direction: column;
-          width: 215px;
+          width: 277px;
 
           .icon-add {
-            width: 215px;
+            width: 277px;
             height: 225px;
             background-color: $beige;
             border-radius: 30px;
@@ -423,6 +403,7 @@ p {
           }
 
           p {
+            text-align: center;
             padding: 10px 24px;
             border-radius: 8px;
             font-family: $font-path;
