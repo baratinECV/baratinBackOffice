@@ -17,14 +17,14 @@
         <li>
           <input v-model="response.name">
           <button @click="destroyResponse(question.id, response.id)">Supprimer</button>
-          <button v-if="key + 1 === question.responses.length" @click="createResponse(question.id)">Ajouter</button>
+          <button v-if="!question.responses || key + 1 === question.responses.length" @click="createResponse(question.id)">Ajouter</button>
         </li>
       </ul>
-      <button v-if="question.responses.length === 0" @click="createResponse(question.id)">Ajouter</button>
+      <button v-if="!question.responses || (question.responses && !question.responses.length > 0)" @click="createResponse(question.id)">Ajouter</button>
     </li>
   </ul>
   <button @click="createQuestion">+ Ajouter une question</button>
-  <button @click="$emit('changeMode')">Sauvegarder</button>
+  <button @click="$emit('changeMode')">Retourner en mode vue</button>
 </template>
 
 <script>
@@ -46,6 +46,7 @@ export default {
             questionnaire_model_id: this.questionnaireModel.id
           })
           .then((response) => {
+            this.questionnaireModel.questions = this.questionnaireModel.questions ? this.questionnaireModel.questions : []
             this.questionnaireModel.questions.push(response.data)
           });
     },
@@ -62,14 +63,23 @@ export default {
             question_id: questionId
           })
           .then((response) => {
-              this.questionnaireModel.questions[questionId].push(response.data)
+            this.questionnaireModel = this.questionnaireModel.questions.map((question) => {
+              question.responses = question.responses ? question.responses : []
+              question.responses.push(response.data)
+              return question
+            });
           });
     },
     async destroyResponse(questionId, responseId) {
       return await axios
           .delete("responses/" + responseId)
           .then(() => {
-            this.questionnaireModel.questions[questionId] = this.questionnaireModel.questions[questionId].filter(response => response.id !== responseId);
+            this.questionnaireModel = this.questionnaireModel.questions.map((question) => {
+              if (question.id === questionId) {
+                question.responses = question.responses.filter((response) => response.id !== responseId);
+              }
+              return question
+            });
           });
     },
   }
