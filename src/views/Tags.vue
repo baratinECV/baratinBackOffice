@@ -1,38 +1,38 @@
 <script>
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "Tags",
-  //   data() {
-  //     return {
-  //       products: [],
-  //     };
-  //   },
-  //   computed: {
-  //     shop() {
-  //       return this.$store.getters.getShop;
-  //     },
-  //   },
-  //   methods: {
-  //     async fetch() {
-  //       return await axios
-  //         .get("products", {
-  //           params: {
-  //             shop_id: this.shop.id,
-  //           },
-  //         })
-  //         .then((response) => {
-  //           this.products = response.data;
-  //         });
-  //     },
-  //     async update(product) {
-  //       product.is_favorite = !product.is_favorite;
-  //       return await axios.patch("products/" + product.id, product);
-  //     },
-  //   },
-  //   mounted() {
-  //     this.fetch();
-  //   },
+    data() {
+      return {
+        tags: [],
+        name: '',
+        active: false
+      };
+    },
+    methods: {
+      async fetch() {
+        return await axios
+          .get("tags")
+          .then((response) => {
+            this.tags = response.data;
+          });
+      },
+      async create() {
+        return await axios.post("tags", {
+          name: this.name
+        }).then((response) => {
+          this.tags.push(response.data)
+          this.name = ''
+        })
+      },
+      async destroy(tagSelected) {
+        return await axios.delete("tags/" + tagSelected.id).then(() => this.tags = this.tags.filter(tag => tag.id !== tagSelected.id));
+      }
+    },
+    mounted() {
+      this.fetch();
+    },
 };
 </script>
 
@@ -67,43 +67,10 @@ export default {
 
     <div class="content-tags">
       <ul>
-        <li>
+        <li v-for="tag in tags" :key="tag.id">
           <div>
-            <p>Boeuf</p>
-            <div class="close">
-              <img
-                src="../assets/immersion/close.png"
-                alt="icon pour supprimer un tag"
-              />
-            </div>
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>Boeuf</p>
-            <div class="close">
-              <img
-                src="../assets/immersion/close.png"
-                alt="icon pour supprimer un tag"
-              />
-            </div>
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>Boeuf</p>
-            <div class="close">
-              <img
-                src="../assets/immersion/close.png"
-                alt="icon pour supprimer un tag"
-              />
-            </div>
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>Boeuf</p>
-            <div class="close">
+            <p>{{tag.name}}</p>
+            <div class="close" @click="destroy(tag)">
               <img
                 src="../assets/immersion/close.png"
                 alt="icon pour supprimer un tag"
@@ -114,15 +81,15 @@ export default {
       </ul>
 
       <div class="contain-add-tags">
-        <a href="" class="btn">Ajouter un tag</a>
+        <p class="btn" @click="() => this.active = true">Ajouter un tag</p>
 
-        <div class="valide-add">
+        <div :class="'valide-add' + (active ? ' active' : '')">
           <div class="name">
             <p>Nom</p>
-            <input />
+            <input v-model="name"/>
           </div>
 
-          <div class="description">
+          <div class="description" @click="create">
             <img src="../assets/immersion/plus.png" alt="" />
           </div>
         </div>
@@ -374,6 +341,7 @@ input {
             position: absolute;
             top: -7px;
             right: -7px;
+            cursor: pointer;
           }
         }
       }
@@ -390,13 +358,20 @@ input {
         text-decoration: none;
         font-weight: 600;
         font-size: 16px;
+        width: fit-content;
+        cursor: pointer;
       }
 
       .valide-add {
+        opacity: 0;
         margin-top: 47px;
         display: flex;
         align-items: flex-end;
         gap: 18px;
+
+        &.active {
+          opacity: 1;
+        }
 
         .name {
           display: flex;
