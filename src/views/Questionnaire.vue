@@ -22,6 +22,7 @@
       v-if="edit"
       :questionnaireModelProps="questionnaire_model"
       @changeMode="toggleMode"
+      @fetch="fetch"
     />
     <QuestionnaireView
       v-else
@@ -70,6 +71,7 @@ export default {
     },
     toggleMode() {
       this.edit = !this.edit;
+      this.fetch()
     },
   },
   mounted() {
