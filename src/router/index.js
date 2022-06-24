@@ -7,11 +7,6 @@ import Tags from "../views/Tags.vue";
 
 const routes = [
   {
-    path: "/",
-    name: "Products",
-    component: Products,
-  },
-  {
     path: "/products",
     name: "Products",
     component: Products,
