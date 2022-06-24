@@ -22,7 +22,31 @@
       </ul>
       <button v-if="!question.responses || (question.responses && !question.responses.length > 0)" @click="createResponse(question.id)">Ajouter</button>
     </li>
+    <li class="model-question">
+      <p>Question {{questionnaireModel.questions ? questionnaireModel.questions.length + 1 : 1}}</p>
+      <input type="text" disabled>
+      <p>Réponses</p>
+      <ul>
+        <li>
+          <input disabled>
+          <button disabled>Supprimer</button>
+          <button disabled>Ajouter</button>
+        </li>
+      </ul>
+    </li>
   </ul>
+  <div v-if="!questionnaireModel.questions || questionnaireModel.questions.length === 0" class="model-question">
+    <p>Question {{questionnaireModel.questions ? questionnaireModel.questions.length + 1 : 1}}</p>
+    <input type="text" disabled>
+    <p>Réponses</p>
+    <ul>
+      <li>
+        <input disabled>
+        <button disabled>Supprimer</button>
+        <button disabled>Ajouter</button>
+      </li>
+    </ul>
+  </div>
   <button @click="createQuestion">+ Ajouter une question</button>
   <button @click="$emit('changeMode')">Retourner en mode vue</button>
 </template>
