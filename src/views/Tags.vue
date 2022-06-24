@@ -298,7 +298,6 @@ input {
   .container-title {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
     .left {
       display: flex;
@@ -334,6 +333,7 @@ input {
 
   .right {
     margin-right: 160px;
+    margin-top: -70px;
     img {
       width: 280px;
     }
@@ -397,6 +397,7 @@ input {
         display: flex;
         align-items: flex-end;
         gap: 18px;
+
         .name {
           display: flex;
           flex-direction: column;
